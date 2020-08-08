@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RectButton } from 'react-native-gesture-handler';
+
+import api from '../../services/api';
 
 import { landing } from '../../assets/images';
 import { study, giveClasses, heart } from '../../assets/icons';
@@ -10,6 +12,14 @@ import styles from './styles';
 
 const Landing: React.FC = () => {
   const { navigate } = useNavigation();
+
+  const [ connections, setConnections ] = useState('');
+
+  useEffect(() => {
+    api.get('connections').then(response => {
+      setConnections(response.data.total);
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -41,7 +51,7 @@ const Landing: React.FC = () => {
       </View>
 
       <Text style={styles.totalConnections} >
-        Total de 300 conexões já realizadas {' '}
+        Total de {connections} conexões já realizadas {' '}
         <Image source={heart} />
       </Text>
     </View>
